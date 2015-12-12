@@ -1,7 +1,7 @@
 //File for debugging
 
 #pragma once
-#define VERBOSE 1 //0 for disable checking, 1 for enable
+#define VERBOSE 0 //0 for disable checking, 1 for enable
 
 
 #include <iostream>
@@ -87,19 +87,5 @@ void printReversedCode(vector<vector<bool> > &table)
                     cout << table[c][n];
                 cout << endl;
             }    
-    }
-}
-
-
-//some more test [delete this!]
-
-void printNumberOfCodes(vector<Size_t> &freq, vector<BYTE> &length, vector<BYTE> &numberOfCodes)
-{
-    if (VERBOSE)
-    {
-        cout << "print Number of Codes:" << endl;
-        for (int c = 0; c != MAX_SYMBOLS; ++c)
-            if (freq[c])
-                cout << numberOfCodes[length[c]] << endl;
     }
 }

@@ -1,4 +1,3 @@
-//lab4
 //File archiver: "archi"
 
 #include <iostream>
@@ -22,12 +21,6 @@ int main(int argc, char **argv)
     ifstream  in;
     ofstream out;
 
-	//А как правильно распарсить параметры?
-    //или сделать, чтобы можно было так задавать параметры: -cd ???
-    //Как тогда? Завести отдельный файл?
-    //Как вообще? Нормальный файл?
-
-    //ОПТИМИЗИРОВАТЬ:
     if ( argv[1]!=NULL && strcmp(argv[1],"-h")==0 ) {
         cout << "Usage: archi [OPTION] [input-file] [output-file]" << endl;
         cout << "  -c, --compress" << endl;
@@ -38,21 +31,19 @@ int main(int argc, char **argv)
         cout << "    display this help and exit" << endl;
 
         cout << "\nThe program uses Huffman`s algorithm for compressing and decompressing." << endl;
-        //cout << "A lot of thanks for help of ... code." << endl;
         cout << "Report archi bugs to AlexanderDydychkin@yandex.ru" << endl;
-        //cout << "Author: Alexander Dydychkin" << endl;
 
         return 0;
     }
     if (argv[1]==NULL || argv[2]==NULL || argv[3]==NULL) {
-		//cout << "archi: missing operand" << endl;
 		cout << "archi: invalid input" << endl;
     	cout << "Try 'archi -h' for more information." << endl;
     	return 0;
 	}
 
-    //FILES work
-    //EXCEPTION???  
+    //working with files
+    //begin
+    //add EXCEPTION???  
     if ( argv[2]!=NULL )
         input=argv[2];
     if ( argv[3]!=NULL )
@@ -65,7 +56,7 @@ int main(int argc, char **argv)
       
         if (!in) {
             cout << "Can't open input file " 
-            << input 
+            << input
             << endl;
             return 1;
         }
@@ -82,19 +73,15 @@ int main(int argc, char **argv)
     }
     //End
 
-	if ( strcmp(argv[1],"-c")==0 ) {
-    //NEW if ( strcmp(argv[1],"-c" || strcmp(argv[1],"--compress")==0 ) {
+    if ( strcmp(argv[1],"-c") == 0 || strcmp(argv[1],"--compress")==0 ) {
     	cout << "Compressing..." << endl;
         MyHuffman.huffmanEncodeFile(in, out, size);
         cout << "Compressed." << endl;
-    	//что делать с output??? Приравнивать к input, но расширение другое?
     }
-    if ( strcmp(argv[1],"-d")==0 ) {
-    //NEW if ( strcmp(argv[1],"-c" || strcmp(argv[1],"--decompress")==0 ) {
+    if ( strcmp(argv[1],"-d")== 0 || strcmp(argv[1],"--decompress")==0 ) {
         cout << "Decompressing..." << endl;
         MyHuffman.huffmanDecodeFile(in, out);
         cout << "Decompressed." << endl;
-        //что делать с output??? Приравнивать к input, но расширение другое?
     }
 
     return 0;

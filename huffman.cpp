@@ -7,11 +7,8 @@
 #include "huffman.h"
 
 using std::priority_queue;
-//using namespace std;
-
 
 //Begin of private functions
-
 void Huffman::readBinary(std::ifstream &in, 
            Size_t        &num)
 {
@@ -66,7 +63,7 @@ void Huffman::buildTable(BYTE                   max_length,
             vector<BYTE>::const_iterator p;
             for (p = buckets[i].begin(); p != buckets[i].end(); ++p)
             {
-                /* Get first i bits in reversed order */
+                //Get first i bits in reversed order
                 for (BYTE bit = 0; bit < i; ++bit)
                     table[*p].push_back(counter & (1 << bit));
                 ++counter;
@@ -81,7 +78,7 @@ void Huffman::buildStartCode(BYTE          max_length,
     BYTE code = 0;
     BYTE lastNumberOfCodes = 0; //for this we made vector of size max_length+1
   
-    /* Find start code for each length. */
+    //Find start code for each length.
     for (BYTE count = max_length; count != 0; --count)
     {
         code += lastNumberOfCodes;
@@ -127,7 +124,7 @@ Node const* Huffman::buildDecodeTree(vector<BYTE>          &symb,
         cur = root;
         for (int bit = static_cast<int>(size) - 1; bit != -1; --bit)
         {
-            if (table[*sit][bit]) /* go right */
+            if (table[*sit][bit]) //go right
             {
                 if (!cur->right)
                 {
@@ -136,7 +133,7 @@ Node const* Huffman::buildDecodeTree(vector<BYTE>          &symb,
                 }
                 cur = cur->right;
             }
-            else /* go left */
+            else //go left
             {
                 if (!cur->left)
                 {
@@ -146,7 +143,7 @@ Node const* Huffman::buildDecodeTree(vector<BYTE>          &symb,
                 cur = cur->left;
             }
         }
-        cur->c = (*sit); /* leaf */
+        cur->c = (*sit); //leaf
     }
     return root;
 }
@@ -264,8 +261,8 @@ void Huffman::decode(std::ifstream &in,
         ++count;
         if (count == CHAR_BITS)
         {
-        count = 0; 
-        byte = in.get();
+            count = 0; 
+            byte = in.get();
         }
     }
   
@@ -285,24 +282,22 @@ void Huffman::huffmanEncodeFile(std::ifstream &in,
         ++freq[c];
     }
     //Uncomment this line and write VERBOSE 1 instead of VERBOSE 0 in verbose.h file for debugging mode
-    printFrequences(freq);
+    //printFrequences(freq);
   
     Node const *root = buildEncodeTree(freq);
     //Uncomment this line and write VERBOSE 1 instead of VERBOSE 0 in verbose.h file for debugging mode
-    printTree(root, 0);
+    //printTree(root, 0);
  
     vector<BYTE> length(MAX_SYMBOLS, 0);
     assignLength(root, length, 0);
     //Uncomment this line and write VERBOSE 1 instead of VERBOSE 0 in verbose.h file for debugging mode 
-    printCodeLength(length);
+    //printCodeLength(length);
 
  
     vector<BYTE> numberOfCodes(MAX_SYMBOLS, 0);  
     for (int c = 0; c != MAX_SYMBOLS; ++c)
         if (freq[c])
             ++numberOfCodes[length[c]];
-    //test
-    printNumberOfCodes(freq, length, numberOfCodes);
 
     Size_t max_length = 0;
     for (int i = 0; i != MAX_SYMBOLS; ++i)
@@ -323,8 +318,7 @@ void Huffman::huffmanEncodeFile(std::ifstream &in,
     vector<BYTE> startCode(MAX_SYMBOLS, 0);
     buildStartCode(max_length, numberOfCodes, startCode);
     //Uncomment this line and write VERBOSE 1 instead of VERBOSE 0 in verbose.h file for debugging mode
-    std::cout << "TEST1" << std::endl;
-    printStartCode(startCode, max_length); 
+    //printStartCode(startCode, max_length); 
 
     vector<vector<bool> > table(MAX_SYMBOLS, vector<bool>());
     buildTable(max_length, 
@@ -333,8 +327,7 @@ void Huffman::huffmanEncodeFile(std::ifstream &in,
 	     buckets,
 	     table);
     //Uncomment this line and write VERBOSE 1 instead of VERBOSE 0 in verbose.h file for debugging mode
-    std::cout << "TEST2 (table)" << std::endl;
-    printReversedCode(table);
+    //printReversedCode(table);
 
     writeOverhead(max_length, numberOfCodes, buckets, out, size);
   
@@ -356,7 +349,6 @@ void Huffman::huffmanDecodeFile(std::ifstream &in,
     vector<BYTE> startCode(MAX_SYMBOLS, 0); 
     buildStartCode(max_length, numberOfCodes, startCode);
     //Uncomment this line and write VERBOSE 1 instead of VERBOSE 0 in verbose.h file for debugging mode
-    //std::cout << "TEST1" << std::endl; 
     //printStartCode(startCode, max_length);
   
     vector<vector<bool> > table(MAX_SYMBOLS, vector<bool>());  
@@ -366,7 +358,6 @@ void Huffman::huffmanDecodeFile(std::ifstream &in,
 	     buckets,
 	     table);
     //Uncomment this line and write VERBOSE 1 instead of VERBOSE 0 in verbose.h file for debugging mode
-    //std::cout << "TEST2" << std::endl;
     //printReversedCode(table);
 
     Node const *root = buildDecodeTree(symb, table);
